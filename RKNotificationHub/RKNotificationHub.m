@@ -387,7 +387,10 @@ static CGFloat const kBumpTimeSeconds2 = 0.1;
     int orderOfMagnitude = log10((double)self.count);
     orderOfMagnitude = (orderOfMagnitude >= 1) ? orderOfMagnitude : 0;
     CGRect frame = initialFrame;
-    frame.size.width = initialFrame.size.width * (1 + kCountMagnitudeAdaptationRatio * orderOfMagnitude) + 3 * (orderOfMagnitude > 1 ? 1 :0);
+    frame.size.width = initialFrame.size.width * (1 + kCountMagnitudeAdaptationRatio * orderOfMagnitude);
+    if (frame.size.width > frame.size.height && self.count < 9) {
+        frame.size.width = frame.size.height;
+    }
     frame.origin.x = initialFrame.origin.x - (frame.size.width - initialFrame.size.width) / 2;
 
     [redCircle setFrame:frame];
