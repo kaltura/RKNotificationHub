@@ -145,16 +145,15 @@ static CGFloat const kBumpTimeSeconds2 = 0.1;
 }
 
 //%%% change the color of the notification circle
-- (void)setCircleColor:(UIColor*)circleColor labelColor:(UIColor*)labelColor
-{
+- (void)setCircleColor:(UIColor*)circleColor circleBorderColor:(UIColor*)circleBorderColor labelColor:(UIColor*)labelColor {
     redCircle.isUserChangingBackgroundColor = YES;
     redCircle.backgroundColor = circleColor;
+    redCircle.layer.borderWidth = 0;
+    if (circleBorderColor) {
+        redCircle.layer.borderColor = circleBorderColor.CGColor;
+        redCircle.layer.borderWidth = .8;
+    }
     [countLabel setTextColor:labelColor];
-}
-
-- (void)setCircleBorderColor:(UIColor *)color borderWidth:(CGFloat)width {
-    redCircle.layer.borderColor = color.CGColor;
-    redCircle.layer.borderWidth = width;
 }
 
 - (void)hideCount
@@ -211,7 +210,7 @@ static CGFloat const kBumpTimeSeconds2 = 0.1;
 //%% set the font of the label
 - (void)setCountLabelFont:(UIFont *)font
 {
-    [countLabel setFont:font];
+    [countLabel setFont:font];//[UIFont fontWithName:font.fontName size:redCircle.frame.size.width/2]];
 }
 
 - (UIFont *)countLabelFont
@@ -386,9 +385,9 @@ static CGFloat const kBumpTimeSeconds2 = 0.1;
 
 - (void)expandToFitLargerDigits {
     int orderOfMagnitude = log10((double)self.count);
-    orderOfMagnitude = (orderOfMagnitude >= 2) ? orderOfMagnitude : 1;
+    orderOfMagnitude = (orderOfMagnitude >= 1) ? orderOfMagnitude : 0;
     CGRect frame = initialFrame;
-    frame.size.width = initialFrame.size.width * (1 + kCountMagnitudeAdaptationRatio * (orderOfMagnitude - 1));
+    frame.size.width = initialFrame.size.width * (1 + kCountMagnitudeAdaptationRatio * orderOfMagnitude) + 3 * (orderOfMagnitude > 1 ? 1 :0);
     frame.origin.x = initialFrame.origin.x - (frame.size.width - initialFrame.size.width) / 2;
 
     [redCircle setFrame:frame];
